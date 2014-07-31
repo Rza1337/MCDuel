@@ -62,13 +62,17 @@ public class DuelListener implements Listener {
 
 		if (DuelManager.isPlayerDueling(player)) {
 			Duel duel = DuelManager.getDuel(player);
-			if(!duel.hasStarted()) {
+			if (!duel.hasStarted()) {
+				for(Player p : duel.getPlayers()) {
+					MessageUtils.sendMessage(p, player.getName() + " has quit, therefore the duel has been cancelled.");
+				}
+				DuelHandler.endDuel(duel);
 				return;
 			}
 			duel.killPlayer(player);
-			
+
 			// Shame players that leave mid duel
-			MessageUtils.broadcastMessage("Opponent: " + player.getName() + " logged out during a duel!");
+			MessageUtils.broadcastMessage("Opponent " + player.getName() + " logged out during a duel!");
 
 			// Checks for victory conditions
 			if (duel.getPlayersAlive() == 1) {
@@ -104,19 +108,19 @@ public class DuelListener implements Listener {
 			}
 		}
 	}
-	
+
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent event) {
 		Player mover = event.getPlayer();
-		
+
 		// Summons lightning on players that leave the arena zone
 		if (DuelManager.isPlayerDueling(mover)) {
 			Duel duel = DuelManager.getDuel(mover);
-			if(duel.hasStarted()) {
+			if (duel.hasStarted()) {
 				Arena arena = ArenaManager.getArena(duel);
-				if(!arena.isInBounds(mover.getLocation())) {
-					mover.getWorld().strikeLightningEffect(mover.getLocation());
-					mover.damage(0.1D); // Investigate if appropriate amounts of damage
+				if (!arena.isInBounds(mover.getLocation())) {
+					mover.damage(1.0D); // Investigate if appropriate amounts of
+										// damage
 				}
 			}
 		}

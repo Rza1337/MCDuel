@@ -14,6 +14,9 @@ public class CommandListener implements Listener {
 	@EventHandler
 	public void onCommandPre(PlayerCommandPreprocessEvent event) {
 		Player player = event.getPlayer();
+		if(player.isOp()) {
+			return;
+		}
 		if (DuelManager.isPlayerDueling(player)) {
 			Duel duel = DuelManager.getDuel(player);
 			if (duel.hasStarted()) {

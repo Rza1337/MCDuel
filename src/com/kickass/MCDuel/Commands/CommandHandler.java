@@ -97,6 +97,12 @@ public class CommandHandler implements CommandExecutor {
 			}
 			return true;
 		} else if (args.length >= 1) {
+			
+			if(playerCooldown.contains(playerSender)) {
+				MessageUtils.sendMessage(playerSender, "You cannot send another duel request yet.");
+				return true;
+			}
+			
 			// Checks that invited players are online
 			ArrayList<Player> participants = new ArrayList<Player>();
 			for (int i = 0; i < args.length; i++) {

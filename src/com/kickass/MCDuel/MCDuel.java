@@ -13,7 +13,7 @@ public class MCDuel extends JavaPlugin {
 	public void onEnable() {
 		instance = this;
 		
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new ArenaManager(), 0, 0);
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new ArenaManager(), 0, 6);
 		ListenerManager.initialize(this);
 		getCommand("duel").setExecutor(new CommandHandler());
 	}

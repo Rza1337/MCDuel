@@ -16,21 +16,21 @@ public class DuelHandler {
 
 		// Generate arena code
 		Location centre = requester.getLocation();
-		Arena arena = new Arena(centre.getWorld(), centre.getBlockX() - ARENA_WIDTH, centre.getBlockZ() - ARENA_WIDTH, ARENA_WIDTH, ARENA_WIDTH);
+		Arena arena = new Arena(centre.getWorld(), centre.getBlockX() - (ARENA_WIDTH / 2), centre.getBlockZ() - (ARENA_WIDTH / 2), (ARENA_WIDTH / 2), (ARENA_WIDTH / 2), centre.getBlockY() - 20, centre.getBlockY() + 20);
 		ArenaManager.addArena(duel, arena);
 
 		if (duel.shouldStart()) {
 			// Teleport
-			for(Player player : duel.getPlayers()) {
+			for (Player player : duel.getPlayers()) {
 				player.teleport(requester);
 			}
-			
+
 			// Create grace period before fighting can occur
 			BukkitRunnable runnable = new BukkitRunnable() {
 				double count = 0;
 				double secs = 3;
 
-				@Override 	
+				@Override
 				public void run() {
 					if (count - secs < 0) {
 						for (Player p : duel.getPlayers()) {
@@ -48,7 +48,7 @@ public class DuelHandler {
 				}
 			};
 			runnable.runTaskTimer(MCDuel.getInstance(), 0, 20);
-			
+
 		}
 	}
 
@@ -69,7 +69,7 @@ public class DuelHandler {
 				}
 				againstString += ", " + p.getName();
 			}
-			MessageUtils.broadcastMessage(winner.getName() + " has won the duel against " + againstString + " !");
+			MessageUtils.broadcastMessage(winner.getName() + " has won the duel against" + againstString + "!");
 		}
 		duel.setEnded(true);
 		DuelManager.removeDuel(duel);

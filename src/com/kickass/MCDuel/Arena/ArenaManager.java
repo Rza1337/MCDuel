@@ -2,6 +2,7 @@ package com.kickass.MCDuel.Arena;
 
 import java.util.HashMap;
 
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.kickass.MCDuel.Duel.Duel;
@@ -13,7 +14,9 @@ public class ArenaManager extends BukkitRunnable {
 		for(Duel d : arenas.keySet()) {
 			if(d.hasStarted()) {
 				Arena a = arenas.get(d);
-				a.render();
+				for(Player p : d.getLivingPlayers()) {
+					a.render(p);
+				}
 			}
 		}
 	}

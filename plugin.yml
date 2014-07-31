@@ -1,5 +1,5 @@
  name: MCDuel
- main: com.kickass.MCDuel
+ main: com.kickass.MCDuel.MCDuel
  authors: [BR3TON, Rza1337]
  version: 0.0.1
  commands:
