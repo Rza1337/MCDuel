@@ -118,9 +118,11 @@ public class DuelListener implements Listener {
 			Duel duel = DuelManager.getDuel(mover);
 			if (duel.hasStarted()) {
 				Arena arena = ArenaManager.getArena(duel);
-				if (!arena.isInBounds(mover.getLocation())) {
-					mover.damage(1.0D); // Investigate if appropriate amounts of
-										// damage
+				if(duel.getLivingPlayers().contains(mover)) {
+					if (!arena.isInBounds(mover.getLocation())) {
+						mover.damage(1.0D); // Investigate if appropriate amounts of
+											// damage
+					}
 				}
 			}
 		}
