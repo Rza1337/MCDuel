@@ -1,6 +1,6 @@
- name: BannaDuel
- main: net.br3ton.mcduel.MCDuel
- author: BR3TON
+ name: MCDuel
+ main: com.kickass.MCDuel
+ authors: [BR3TON, Rza1337]
  version: 0.0.1
  commands:
    duel:

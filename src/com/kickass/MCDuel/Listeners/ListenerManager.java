@@ -1,9 +1,11 @@
-package net.br3ton.mcduel;
+package com.kickass.MCDuel.Listeners;
 
 import java.util.ArrayList;
 
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
+
+import com.kickass.MCDuel.MCDuel;
 
 public class ListenerManager {
 
@@ -16,8 +18,8 @@ public class ListenerManager {
 	private static ArrayList<Listener> listeners = new ArrayList<Listener>();
 
 	static {
-		listeners.add(new DuelManager());
 		listeners.add(new CommandListener());
+		listeners.add(new DuelListener());
 	}
 
 }

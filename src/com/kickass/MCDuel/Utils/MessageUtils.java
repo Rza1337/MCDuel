@@ -1,4 +1,4 @@
-package net.br3ton.mcduel;
+package com.kickass.MCDuel.Utils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

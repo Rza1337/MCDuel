@@ -1,4 +1,4 @@
-package net.br3ton.mcduel;
+package com.kickass.MCDuel.Utils;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
