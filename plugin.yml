@@ -1,4 +1,4 @@
- name: MCDuel
+ name: BannaDuel
  main: com.kickass.MCDuel.MCDuel
  authors: [BR3TON, Rza1337]
  version: 0.0.1
