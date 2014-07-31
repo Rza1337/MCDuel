@@ -1,0 +1,11 @@
+ name: BannaDuel
+ main: net.br3ton.mcduel.MCDuel
+ author: BR3TON
+ version: 0.0.1
+ commands:
+   duel:
+      description: Duel command.
+      usage: /duel [player]
+ permissions:
+   bannaduel.duel:
+     description: Gives access to duel command
