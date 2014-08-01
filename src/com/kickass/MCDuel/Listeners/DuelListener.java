@@ -7,11 +7,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import com.kickass.MCDuel.Arena.Arena;
-import com.kickass.MCDuel.Arena.ArenaManager;
 import com.kickass.MCDuel.Duel.Duel;
 import com.kickass.MCDuel.Duel.DuelHandler;
 import com.kickass.MCDuel.Duel.DuelManager;
@@ -63,7 +60,7 @@ public class DuelListener implements Listener {
 		if (DuelManager.isPlayerDueling(player)) {
 			Duel duel = DuelManager.getDuel(player);
 			if (!duel.hasStarted()) {
-				for(Player p : duel.getPlayers()) {
+				for (Player p : duel.getPlayers()) {
 					MessageUtils.sendMessage(p, player.getName() + " has quit, therefore the duel has been cancelled.");
 				}
 				DuelHandler.endDuel(duel);
@@ -105,25 +102,6 @@ public class DuelListener implements Listener {
 			// Checks for victory conditions
 			if (duel.getPlayersAlive() == 1) {
 				DuelHandler.endDuel(duel);
-			}
-		}
-	}
-
-	@EventHandler
-	public void onPlayerMove(PlayerMoveEvent event) {
-		Player mover = event.getPlayer();
-
-		// Summons lightning on players that leave the arena zone
-		if (DuelManager.isPlayerDueling(mover)) {
-			Duel duel = DuelManager.getDuel(mover);
-			if (duel.hasStarted()) {
-				Arena arena = ArenaManager.getArena(duel);
-				if(duel.getLivingPlayers().contains(mover)) {
-					if (!arena.isInBounds(mover.getLocation())) {
-						mover.damage(1.0D); // Investigate if appropriate amounts of
-											// damage
-					}
-				}
 			}
 		}
 	}
