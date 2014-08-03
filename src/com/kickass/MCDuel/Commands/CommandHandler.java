@@ -3,6 +3,7 @@ package com.kickass.MCDuel.Commands;
 import java.util.ArrayList;
 
 import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -103,6 +104,9 @@ public class CommandHandler implements CommandExecutor {
 				return true;
 			}
 			
+			// Requesters current World
+			World w = playerSender.getWorld();
+			
 			// Checks that invited players are online
 			ArrayList<Player> participants = new ArrayList<Player>();
 			for (int i = 0; i < args.length; i++) {
@@ -118,6 +122,9 @@ public class CommandHandler implements CommandExecutor {
 				Player player = Bukkit.getPlayer(args[i]);
 				if (player == null) {
 					MessageUtils.sendMessage(playerSender, args[i] + " is not online. The duel requests have not gone through.");
+					return true;
+				} else if (!player.getWorld().getName().equalsIgnoreCase(w.getName())) {
+					MessageUtils.sendMessage(playerSender, args[i] + " is not in the correct world. The duel request has not gone through.");
 					return true;
 				} else {
 					participants.add(player);

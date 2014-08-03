@@ -21,35 +21,36 @@ public class DuelListener implements Listener {
 	public void onPlayerAttack(EntityDamageByEntityEvent event) {
 		Entity attacker = event.getDamager();
 		Entity defender = event.getEntity();
+		
+		if(attacker.getType() == EntityType.PLAYER && defender.getType() == EntityType.PLAYER) {
+			Player attackerPlayer = (Player) attacker;
+			Player defenderPlayer = (Player) defender;
 
-		if (defender.getType() == EntityType.PLAYER && attacker.getType() == EntityType.PLAYER) {
-			Player pDefender = (Player) defender;
-			Player pAttacker = (Player) attacker;
-
-			// Only need to check the defenders duelling status for stopping
-			// damage whilst duelling
-			if (DuelManager.isPlayerDueling(pDefender)) {
-				Duel duel = DuelManager.getDuel(pDefender);
-				if (duel.getLivingPlayers().contains(pAttacker)) {
-					if (duel.hasStarted()) {
-						return;
-					}
+			// Only lets attackers attack players in their duel
+			if(DuelManager.isPlayerDueling(attackerPlayer)) {
+				Duel duel = DuelManager.getDuel(attackerPlayer);
+				if(duel.getPlayers().contains(defenderPlayer) && duel.hasStarted()) {
+					return;
 				}
 				event.setCancelled(true);
 				event.setDamage(0.0D);
 			}
-
-			// Checks to ensure a dueller is only damaging a combatant
-			if (DuelManager.isPlayerDueling(pAttacker)) {
-				Duel duel = DuelManager.getDuel(pAttacker);
-				if (duel.getLivingPlayers().contains(pDefender)) {
-					if (duel.hasStarted()) {
+		} else if(defender.getType() == EntityType.PLAYER) {
+			Player defenderPlayer = (Player) defender;
+			
+			// Only lets defenders get attacked by players in their duel
+			if(attacker.getType() == EntityType.PLAYER) {
+				Player attackerPlayer = (Player) attacker;
+				if(DuelManager.isPlayerDueling(defenderPlayer)) {
+					Duel duel = DuelManager.getDuel(defenderPlayer);
+					if(duel.getPlayers().contains(attackerPlayer) && duel.hasStarted()) {
 						return;
 					}
 				}
-				event.setCancelled(true);
-				event.setDamage(0.0D);
 			}
+			
+			event.setCancelled(true);
+			event.setDamage(0.0D);
 		}
 	}
 
