@@ -7,6 +7,10 @@ import org.bukkit.entity.Player;
 public class Duel {
 
 	public Duel(Player duelReq, Player... players) {
+		new Duel(0, duelReq, players);
+	}
+	
+	public Duel(int stake, Player duelReq, Player... players) {
 		duelRequester = duelReq;
 		if (players == null || players.length == 0) {
 			throw new IllegalArgumentException("You must have at least one other player to duel.");
@@ -22,6 +26,9 @@ public class Duel {
 			duelPlayers.add(p);
 			playersAlive.add(p);
 		}
+		
+		// Sets stake
+		this.stake = stake;
 	}
 
 	public Player getRequester() {
@@ -81,10 +88,15 @@ public class Duel {
 	public boolean hasEnded() {
 		return ended;
 	}
+	
+	public int getStake() {
+		return stake;
+	}
 
 	private Player duelRequester;
 	private boolean started = false;
 	private boolean ended = false;
+	private int stake = 0;
 	private final ArrayList<Player> acceptedPlayers = new ArrayList<Player>();
 	private final ArrayList<Player> playersAlive = new ArrayList<Player>();
 	private final ArrayList<Player> duelPlayers = new ArrayList<Player>();

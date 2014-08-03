@@ -22,6 +22,12 @@ public class CommandListener implements Listener {
 			if (duel.hasStarted()) {
 				event.setCancelled(true);
 				MessageUtils.sendMessage(event.getPlayer(), "You cannot use commands while dueling!");
+			} else {
+				String command = event.getMessage().toLowerCase();
+				if(command.contains("eco") || command.contains("pay")) {
+					event.setCancelled(true);
+					MessageUtils.sendMessage(event.getPlayer(), "You cannot use economy commands while waiting to duel!");
+				}
 			}
 		}
 	}

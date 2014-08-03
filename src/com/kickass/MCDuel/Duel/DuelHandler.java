@@ -1,5 +1,7 @@
 package com.kickass.MCDuel.Duel;
 
+import net.milkbowl.vault.economy.Economy;
+
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -8,6 +10,7 @@ import com.kickass.MCDuel.MCDuel;
 import com.kickass.MCDuel.Arena.Arena;
 import com.kickass.MCDuel.Arena.ArenaManager;
 import com.kickass.MCDuel.Utils.MessageUtils;
+import com.kickass.MCDuel.Utils.VaultUtils;
 
 public class DuelHandler {
 
@@ -58,8 +61,21 @@ public class DuelHandler {
 
 			// Winner actions
 			winner.setHealth(winner.getMaxHealth());
-			// TODO Give winnings (in future versions, players can bet/buy in to
-			// duels)
+			
+			// Gives winnings to the winner
+			if(duel.getStake() != 0) {
+				Economy eco = VaultUtils.getEconomy();
+				for(Player p : duel.getPlayers()) {
+					if(p.getUniqueId().equals(winner.getUniqueId())) {
+						continue;
+					}
+					eco.withdrawPlayer(p, duel.getStake());
+					MessageUtils.sendMessage(p, "You lost " + duel.getStake() + " in this duel.");
+				}
+				int earnings = duel.getStake() * (duel.getPlayers().size() - 1);
+				eco.depositPlayer(winner, earnings);
+				MessageUtils.sendMessage(winner, "You won " + earnings + " in this duel.");
+			}
 
 			// Broadcast winner to server
 			String againstString = "";

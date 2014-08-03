@@ -2,7 +2,10 @@ package com.kickass.MCDuel.Commands;
 
 import java.util.ArrayList;
 
+import net.milkbowl.vault.economy.Economy;
+
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -14,6 +17,7 @@ import com.kickass.MCDuel.Duel.Duel;
 import com.kickass.MCDuel.Duel.DuelHandler;
 import com.kickass.MCDuel.Duel.DuelManager;
 import com.kickass.MCDuel.Utils.MessageUtils;
+import com.kickass.MCDuel.Utils.VaultUtils;
 
 public class CommandHandler implements CommandExecutor {
 
@@ -104,6 +108,27 @@ public class CommandHandler implements CommandExecutor {
 				return true;
 			}
 			
+			
+			boolean isBet = false;
+			int stakeValue = 0;
+
+			// Checks if there is a bet or not
+			if(args.length >= 2) {
+				String stake = args[0];
+				@SuppressWarnings("deprecation")
+				Player p = Bukkit.getPlayer(stake);
+				if(p == null) {
+					try {
+						stakeValue = Integer.parseInt(stake);
+						if(stakeValue > 0) {
+							isBet = true;
+						} else {
+							MessageUtils.sendMessage(sender, "You must place a bet greater than 0");
+						}
+					} catch (NumberFormatException ex) {}
+				}
+			}
+			
 			// Requesters current World
 			World w = playerSender.getWorld();
 			
@@ -130,9 +155,24 @@ public class CommandHandler implements CommandExecutor {
 					participants.add(player);
 				}
 			}
+			
+			// Checks everyone can afford the bet
+			if(isBet) {
+				Economy eco = VaultUtils.getEconomy();
+				if(eco == null) {
+					MessageUtils.broadcastError("Vault has not found a valid economy. Please report to an admin.");
+				}
+				for(Player p : participants) {
+					if(!(eco.getBalance(p) >= stakeValue)) {
+						MessageUtils.sendMessage(playerSender, p.getName() + " cannot afford to join the duel. The duel request has not gone through.");
+						return true;
+					}
+				}
+			}
+			
 			Player[] participantArr = new Player[participants.size()];
 			participantArr = participants.toArray(participantArr);
-			final Duel duel = new Duel(playerSender, participantArr);
+			final Duel duel = new Duel(stakeValue, playerSender, participantArr);
 			DuelManager.addDuel(duel);
 
 			// Sends messages to accept or decline to everyone
@@ -148,6 +188,9 @@ public class CommandHandler implements CommandExecutor {
 					MessageUtils.sendMessage(p, "You sent invites to" + againstString);
 				} else {
 					MessageUtils.sendMessage(p, duel.getRequester().getName() + " has invited you to duel. Type /duel accept or /duel decline");
+					if(duel.getStake() > 0) {
+						MessageUtils.sendMessage(p, ChatColor.DARK_RED + "[WARNING] " + ChatColor.WHITE + "this duel has a stake entry of " + ChatColor.GREEN + " " + duel.getStake());
+					}
 				}
 			}
 
@@ -187,7 +230,7 @@ public class CommandHandler implements CommandExecutor {
 		MessageUtils.sendMessage(sender, "<>'s indicate optional arguments.");
 		MessageUtils.sendMessage(sender, "...'s indicate an option to have a limitless amount.");
 		MessageUtils.sendMessage(sender, "Command format is as follows:");
-		// TODO add optional betting buy in for a duel
+		MessageUtils.sendMessage(sender, "/duel <Coin Bet> [PlayerName] <Alternative PlayerName>...");
 		MessageUtils.sendMessage(sender, "/duel [PlayerName] <Alternative PlayerName>...");
 		return true;
 	}
