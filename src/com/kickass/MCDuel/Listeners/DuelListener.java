@@ -29,7 +29,7 @@ public class DuelListener implements Listener {
 			// Only lets attackers attack players in their duel
 			if(DuelManager.isPlayerDueling(attackerPlayer)) {
 				Duel duel = DuelManager.getDuel(attackerPlayer);
-				if(duel.getPlayers().contains(defenderPlayer) && duel.hasStarted()) {
+				if(duel.getPlayers().contains(defenderPlayer) && duel.hasStarted() && duel.isAccepted()) {
 					return;
 				}
 				event.setCancelled(true);
@@ -43,7 +43,7 @@ public class DuelListener implements Listener {
 				Player attackerPlayer = (Player) attacker;
 				if(DuelManager.isPlayerDueling(defenderPlayer)) {
 					Duel duel = DuelManager.getDuel(defenderPlayer);
-					if(duel.getPlayers().contains(attackerPlayer) && duel.hasStarted()) {
+					if(duel.getPlayers().contains(attackerPlayer) && duel.hasStarted() && duel.isAccepted()) {
 						return;
 					}
 				}
