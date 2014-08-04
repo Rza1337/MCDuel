@@ -46,11 +46,10 @@ public class DuelListener implements Listener {
 					if(duel.getPlayers().contains(attackerPlayer) && duel.hasStarted() && duel.isAccepted()) {
 						return;
 					}
+					event.setCancelled(true);
+					event.setDamage(0.0D);
 				}
 			}
-			
-			event.setCancelled(true);
-			event.setDamage(0.0D);
 		}
 	}
 
