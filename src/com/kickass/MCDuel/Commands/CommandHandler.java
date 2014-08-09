@@ -117,13 +117,14 @@ public class CommandHandler implements CommandExecutor {
 				String stake = args[0];
 				@SuppressWarnings("deprecation")
 				Player p = Bukkit.getPlayer(stake);
-				if(p == null) {
+				if(p == null || !p.isOnline()) {
 					try {
 						stakeValue = Integer.parseInt(stake);
 						if(stakeValue > 0) {
 							isBet = true;
 						} else {
 							MessageUtils.sendMessage(sender, "You must place a bet greater than 0");
+							return true;
 						}
 					} catch (NumberFormatException ex) {}
 				}
@@ -134,8 +135,16 @@ public class CommandHandler implements CommandExecutor {
 			
 			// Checks that invited players are online
 			ArrayList<Player> participants = new ArrayList<Player>();
+
 			for (int i = 0; i < args.length; i++) {
 
+				// Skip first arg is is bet
+				if(isBet) {
+					if(i == 0) {
+						continue;
+					}
+				}
+				
 				// Stops players inviting themselves
 				if (args[i].equalsIgnoreCase(playerSender.getName())) {
 					MessageUtils.sendMessage(playerSender, "You cannot invite yourself.");
@@ -189,7 +198,7 @@ public class CommandHandler implements CommandExecutor {
 				} else {
 					MessageUtils.sendMessage(p, duel.getRequester().getName() + " has invited you to duel. Type /duel accept or /duel decline");
 					if(duel.getStake() > 0) {
-						MessageUtils.sendMessage(p, ChatColor.DARK_RED + "[WARNING] " + ChatColor.WHITE + "this duel has a stake entry of " + ChatColor.GREEN + " " + duel.getStake());
+						MessageUtils.sendMessage(p, ChatColor.DARK_RED + "[WARNING] " + ChatColor.WHITE + "this duel has a stake entry of " + ChatColor.GREEN  + duel.getStake());
 					}
 				}
 			}
