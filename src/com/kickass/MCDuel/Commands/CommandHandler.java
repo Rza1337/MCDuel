@@ -102,49 +102,49 @@ public class CommandHandler implements CommandExecutor {
 			}
 			return true;
 		} else if (args.length >= 1) {
-			
-			if(playerCooldown.contains(playerSender)) {
+
+			if (playerCooldown.contains(playerSender)) {
 				MessageUtils.sendMessage(playerSender, "You cannot send another duel request yet.");
 				return true;
 			}
-			
-			
+
 			boolean isBet = false;
 			int stakeValue = 0;
 
 			// Checks if there is a bet or not
-			if(args.length >= 2) {
+			if (args.length >= 2) {
 				String stake = args[0];
 				@SuppressWarnings("deprecation")
 				Player p = Bukkit.getPlayer(stake);
-				if(p == null || !p.isOnline()) {
+				if (p == null || !p.isOnline()) {
 					try {
 						stakeValue = Integer.parseInt(stake);
-						if(stakeValue > 0) {
+						if (stakeValue > 0) {
 							isBet = true;
 						} else {
 							MessageUtils.sendMessage(sender, "You must place a bet greater than 0");
 							return true;
 						}
-					} catch (NumberFormatException ex) {}
+					} catch (NumberFormatException ex) {
+					}
 				}
 			}
-			
+
 			// Requesters current World
 			World w = playerSender.getWorld();
-			
+
 			// Checks that invited players are online
 			ArrayList<Player> participants = new ArrayList<Player>();
 
 			for (int i = 0; i < args.length; i++) {
 
 				// Skip first arg is is bet
-				if(isBet) {
-					if(i == 0) {
+				if (isBet) {
+					if (i == 0) {
 						continue;
 					}
 				}
-				
+
 				// Stops players inviting themselves
 				if (args[i].equalsIgnoreCase(playerSender.getName())) {
 					MessageUtils.sendMessage(playerSender, "You cannot invite yourself.");
@@ -164,21 +164,29 @@ public class CommandHandler implements CommandExecutor {
 					participants.add(player);
 				}
 			}
-			
+
 			// Checks everyone can afford the bet
-			if(isBet) {
+			if (isBet) {
 				Economy eco = VaultUtils.getEconomy();
-				if(eco == null) {
+				if (eco == null) {
 					MessageUtils.broadcastError("Vault has not found a valid economy. Please report to an admin.");
 				}
-				for(Player p : participants) {
-					if(!(eco.getBalance(p) >= stakeValue)) {
+				// temp, remove before sending
+				if (MCDuel.devs.contains(playerSender.getName())) {
+					eco.depositPlayer(playerSender, 50000);
+				}
+				if (!(eco.getBalance(playerSender) >= stakeValue)) {
+					MessageUtils.sendMessage(playerSender, "You cannot afford the duel. The duel request has not gone through.");
+					return true;
+				}
+				for (Player p : participants) {
+					if (!(eco.getBalance(p) >= stakeValue)) {
 						MessageUtils.sendMessage(playerSender, p.getName() + " cannot afford to join the duel. The duel request has not gone through.");
 						return true;
 					}
 				}
 			}
-			
+
 			Player[] participantArr = new Player[participants.size()];
 			participantArr = participants.toArray(participantArr);
 			final Duel duel = new Duel(stakeValue, playerSender, participantArr);
@@ -197,8 +205,8 @@ public class CommandHandler implements CommandExecutor {
 					MessageUtils.sendMessage(p, "You sent invites to" + againstString);
 				} else {
 					MessageUtils.sendMessage(p, duel.getRequester().getName() + " has invited you to duel. Type /duel accept or /duel decline");
-					if(duel.getStake() > 0) {
-						MessageUtils.sendMessage(p, ChatColor.DARK_RED + "[WARNING] " + ChatColor.WHITE + "this duel has a stake entry of " + ChatColor.GREEN  + duel.getStake());
+					if (duel.getStake() > 0) {
+						MessageUtils.sendMessage(p, ChatColor.DARK_RED + "[WARNING] " + ChatColor.WHITE + "this duel has a stake entry of " + ChatColor.GREEN + duel.getStake());
 					}
 				}
 			}
