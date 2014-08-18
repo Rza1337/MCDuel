@@ -13,8 +13,8 @@ public class CommandListener implements Listener {
 
 	@EventHandler
 	public void onCommandPre(PlayerCommandPreprocessEvent event) {
-		Player player = event.getPlayer();
-		if(player.isOp()) {
+		final Player player = event.getPlayer();
+		if (player.isOp()) {
 			return;
 		}
 		if (DuelManager.isPlayerDueling(player)) {
@@ -24,7 +24,7 @@ public class CommandListener implements Listener {
 				MessageUtils.sendMessage(event.getPlayer(), "You cannot use commands while dueling!");
 			} else {
 				String command = event.getMessage().toLowerCase();
-				if(command.contains("eco") || command.contains("pay")) {
+				if (command.contains("eco") || command.contains("pay")) {
 					event.setCancelled(true);
 					MessageUtils.sendMessage(event.getPlayer(), "You cannot use economy commands while waiting to duel!");
 				}

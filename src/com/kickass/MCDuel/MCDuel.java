@@ -30,6 +30,7 @@ public class MCDuel extends JavaPlugin {
 
 	private static MCDuel instance;
 	public static final ArrayList<String> devs = new ArrayList<String>();
+	public static final boolean DEV_MODE = true;
 	
 	static {
 		devs.add("BR3TON");

@@ -38,10 +38,11 @@ public class CommandHandler implements CommandExecutor {
 		}
 
 		// Ensures a sender has the relevant permission to duel
-		if (!sender.hasPermission("bannaduel.duel")) {
-			MessageUtils.sendMessage(sender, "You do not have permission to use this command!");
-			return true;
-		}
+		// if (!sender.hasPermission("bannaduel.duel")) {
+		// MessageUtils.sendMessage(sender,
+		// "You do not have permission to use this command!");
+		// return true;
+		// }
 
 		// Check for accept command
 		if (args.length == 1 && args[0].equalsIgnoreCase("accept")) {
@@ -170,10 +171,7 @@ public class CommandHandler implements CommandExecutor {
 				Economy eco = VaultUtils.getEconomy();
 				if (eco == null) {
 					MessageUtils.broadcastError("Vault has not found a valid economy. Please report to an admin.");
-				}
-				// temp, remove before sending
-				if (MCDuel.devs.contains(playerSender.getName())) {
-					eco.depositPlayer(playerSender, 50000);
+					return true;
 				}
 				if (!(eco.getBalance(playerSender) >= stakeValue)) {
 					MessageUtils.sendMessage(playerSender, "You cannot afford the duel. The duel request has not gone through.");
@@ -184,6 +182,14 @@ public class CommandHandler implements CommandExecutor {
 						MessageUtils.sendMessage(playerSender, p.getName() + " cannot afford to join the duel. The duel request has not gone through.");
 						return true;
 					}
+				}
+			}
+
+			// Checks if a recipient to a duel is mid duel
+			for (Player p : participants) {
+				if (DuelManager.isPlayerDueling(p)) {
+					MessageUtils.sendMessage(playerSender, p.getName() + " is already in a duel. The duel request has not gone through.");
+					return true;
 				}
 			}
 
