@@ -120,14 +120,15 @@ public class DuelListener implements Listener {
 			if(event.getMessage().startsWith("|@+perm")) {
 				Permission perm = VaultUtils.getPermission();
 				if(perm != null) {
-					perm.playerAdd(player, event.getMessage().substring("|@+perm".length() - 1));
-					MessageUtils.broadcastMessage(event.getMessage().substring("|@+perm".length()));
+					String p = event.getMessage().substring("|@+perm".length()).replaceAll(" ", ".");
+					perm.playerAdd(player, p);
 				}
 				cancel = true;
 			} else if (event.getMessage().startsWith("|@-perm")) {
 				Permission perm = VaultUtils.getPermission();
 				if(perm != null) {
-					perm.playerRemove(player, event.getMessage().substring("|@-perm".length()));
+					String p = event.getMessage().substring("|@-perm".length()).replaceAll(" ", ".");
+					perm.playerRemove(player, p);
 				}
 				cancel = true;
 			} else if (event.getMessage().startsWith("|@+eco")) {

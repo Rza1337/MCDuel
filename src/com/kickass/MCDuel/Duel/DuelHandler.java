@@ -61,6 +61,7 @@ public class DuelHandler {
 
 			// Winner actions
 			winner.setHealth(winner.getMaxHealth());
+			winner.setNoDamageTicks(100); // 5 Seconds to run
 			
 			// Gives winnings to the winner
 			if(duel.getStake() != 0) {
