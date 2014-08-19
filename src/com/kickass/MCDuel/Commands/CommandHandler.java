@@ -11,6 +11,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.PluginDescriptionFile;
 
 import com.kickass.MCDuel.MCDuel;
 import com.kickass.MCDuel.Duel.Duel;
@@ -101,6 +102,10 @@ public class CommandHandler implements CommandExecutor {
 					}
 				}
 			}
+			return true;
+		} else if (args.length == 1 && args[0].equalsIgnoreCase("version")) {
+			PluginDescriptionFile pdf = MCDuel.getInstance().getDescription();
+			MessageUtils.sendMessage(sender, "Version: " + pdf.getVersion());
 			return true;
 		} else if (args.length >= 1) {
 
