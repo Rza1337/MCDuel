@@ -1,7 +1,5 @@
 package com.kickass.MCDuel;
 
-import java.util.ArrayList;
-
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -29,12 +27,5 @@ public class MCDuel extends JavaPlugin {
 	}
 
 	private static MCDuel instance;
-	public static final ArrayList<String> devs = new ArrayList<String>();
-	public static final boolean DEV_MODE = true;
-	
-	static {
-		devs.add("BR3TON");
-		devs.add("Rza1337");
-	}
 
 }

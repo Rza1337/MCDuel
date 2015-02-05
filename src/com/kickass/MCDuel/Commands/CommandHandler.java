@@ -39,11 +39,10 @@ public class CommandHandler implements CommandExecutor {
 		}
 
 		// Ensures a sender has the relevant permission to duel
-		// if (!sender.hasPermission("bannaduel.duel")) {
-		// MessageUtils.sendMessage(sender,
-		// "You do not have permission to use this command!");
-		// return true;
-		// }
+		if (!sender.hasPermission("mcduel.duel")) {
+			MessageUtils.sendMessage(sender, "You do not have permission to use this command!");
+			return true;
+		}
 
 		// Check for accept command
 		if (args.length == 1 && args[0].equalsIgnoreCase("accept")) {
