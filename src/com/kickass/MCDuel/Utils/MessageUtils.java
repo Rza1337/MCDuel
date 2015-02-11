@@ -49,6 +49,6 @@ public class MessageUtils {
 		Bukkit.getServer().broadcastMessage(prefix + ChatColor.RED + message);
 	}
 
-	private static String prefix = ChatColor.GOLD + "BannaDuel " + ChatColor.DARK_GRAY + "| ";
+	private static String prefix = ChatColor.GOLD + "MCDuel " + ChatColor.DARK_GRAY + "| ";
 
 }
